@@ -19,13 +19,39 @@ app.use(logger);
 // Serves up all static and generated assets in ../client/dist.
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-/**** 
- * 
- * 
+//middleware, parses incoming req with json--based on body parser
+app.use(express.json());
+
+
+/****
+ *
+ *
  * Other routes here....
  *
- * 
+ *
  */
+
+app.post('/user', (req, res) => {
+  db.queryAsync(`INSERT INTO users (id, name, email, password) VALUES('${req.session_id}', '${req.body.name}', '${req.body.email}', '${req.body.password}')`).then((response) =>{
+    res.send();
+  }).catch((err)=>{
+    res.end(err)
+  })
+})
+
+
+app.post('/address', (req, res) => {
+  db.query(`INSERT INTO users (id, line1, line2, city, state, zip, phone) VALUES('${req.session_id}', '${req.body.line1}', '${req.body.line2}', '${req.body.city}', '${req.body.state}', '${req.body.zip}', ${req.body.phone}')`, (err, results) => {
+    if (err) {
+      console.log(err)
+      res.send(err)
+    } else {
+      res.send(results)
+    }
+  })
+})
+
+
 
 app.listen(process.env.PORT);
 console.log(`Listening at http://localhost:${process.env.PORT}`);

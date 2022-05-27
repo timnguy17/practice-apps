@@ -2,6 +2,7 @@ const mysql = require("mysql2");
 const Promise = require("bluebird");
 
 // Configure process.env variables in ../.env
+//creates connection to db
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -9,6 +10,7 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
+//assigned var to connection to export
 const db = Promise.promisifyAll(connection, { multiArgs: true });
 
 db.connectAsync()
